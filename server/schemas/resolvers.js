@@ -49,3 +49,5 @@ const resolvers = {
 // delete a book 
     }
 }
+
+module.exports = resolvers
