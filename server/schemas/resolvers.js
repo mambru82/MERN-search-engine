@@ -1,4 +1,6 @@
-const { User, Book } = require('../models')
+const { User } = require('../models')
+const { AuthenticationError } = require('apollo-server-express')
+const { signToken } = require('../utils/auth')
 
 const resolvers = {
     Query: {
@@ -7,9 +9,9 @@ const resolvers = {
             if (context.user){
                 const userData = await User.findOne({_id: context.user._id})
                     .select('-__v -password')
-                    .populate('savedBooks')
-                    .populate('bookCount')
-                    .populate('email')
+                    // .populate('savedBooks')
+                    // .populate('bookCount')
+                    // .populate('email')
                 
                 return userData;
             }
@@ -27,7 +29,7 @@ const resolvers = {
         },
 
         login: async (parent, {email, password}) => {
-            const user = await User.findone({ email });
+            const user = await User.findOne({ email });
 
             if(!user) {
                 throw new AuthenticationError('Incorrect credentials');
